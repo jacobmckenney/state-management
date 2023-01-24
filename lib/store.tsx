@@ -1,15 +1,20 @@
-import { Component, FC, ReactElement } from "react";
+import { Component, FC, ReactElement, useState } from "react";
 import React from "react";
 import { Action, OptionalActionArgs, State, ConnectArgs } from "./types";
 
+type Selector = (state: State) => State;
+
 const createStore = (reducer: (state: State, action: Action) => State) => {
-    let store: any = undefined;
+    // Initialize to an undefined object and unkown type to start with the user-defined initial state
+    const [store, setStore] = useState<State>(() => reducer(undefined, { type: "^^initialize^^" })); // use functional init for lazy init (one call)
     const dispatch = (action: Action) => {
-        store = reducer(store, action);
+        setStore(reducer(store, action));
     };
     return {
         dispatch,
-        useSelector: (selector: (state: State | undefined) => State | undefined) => {
+        store,
+        getState: () => store,
+        useSelector: (selector: Selector) => {
             return selector(store);
         },
         createDispatch: (actionType: string) => {

@@ -29,7 +29,7 @@ const HANDLERS: ActionHandlers = {
    },
    [ADD_COMPANY]: (state: State, action: Action) => {
         const newCompany = action.payload;
-        const currentCompanies = state.companies;
+        const currentCompanies = state?.companies;
         return currentCompanies.includes(newCompany) ? state : {
             ...state,
             companies: [...currentCompanies, newCompany]

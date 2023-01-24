@@ -1,4 +1,4 @@
-type State = Record<string, any>
+type State = Record<string, any> | undefined;
 type Action = RequiredActionArgs & OptionalActionArgs;
 type RequiredActionArgs = {
     type: string;
