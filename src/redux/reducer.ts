@@ -1,5 +1,6 @@
-import type { Action, ActionHandlers} from "./types"
-
+import type { Action, ActionHandlers} from "../../lib/types";
+import isEqual from "lodash/isEqual";
+// initial state
 const initialState = {
     name: "Jacob",
     title: "Software Engineer",
@@ -15,12 +16,21 @@ const initialState = {
         salary: 8000,
     }],
 };
+export type Company = {
+    name: string,
+    salary: number,
+}
+type AppState = {
+    name: string,
+    title: string,
+    companies: Company[],
+}
 
-type AppState = typeof initialState;
-
+// Action Keys
 export const CHANGE_NAME = "change_name";
 export const ADD_COMPANY = "add_company"
 
+// Action Definitions
 const HANDLERS: ActionHandlers<AppState> = {
    [CHANGE_NAME]: (state: AppState, action: Action) => {
         return {
@@ -31,7 +41,7 @@ const HANDLERS: ActionHandlers<AppState> = {
    [ADD_COMPANY]: (state: AppState, action: Action) => {
         const newCompany = action.payload;
         const currentCompanies = state?.companies;
-        return currentCompanies.includes(newCompany) ? state : {
+        return currentCompanies.some((curr) => isEqual(curr, newCompany)) ? state : {
             ...state,
             companies: [...currentCompanies, newCompany]
         }

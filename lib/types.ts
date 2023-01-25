@@ -7,7 +7,8 @@ type OptionalActionArgs = {
     meta?: any;
     error?: boolean
 }
-type Dispatch = (action: Action) => void;
+export type Dispatch = (action: Action) => void;
+export type CreatedDispatch = (opArgs: OptionalActionArgs) => void;
 type ActionHandlers<S> = Record<string, (state: S, action: Action) => S>;
 interface ConnectArgs<S> {
     mapStateToProps: {[prop: string]: S},

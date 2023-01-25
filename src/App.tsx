@@ -1,24 +1,26 @@
 import React, { useState } from "react";
-import Test from "./Test";
-import { createStore } from "../lib/store";
-import { reducer, CHANGE_NAME } from "../lib/example_reducer";
-import { AppState } from "../lib/example_reducer";
-
-const { dispatch, subscribe, connect, createDispatch, createSelector, getState } = createStore(reducer);
+import DispatchButton from "./DispatchButton";
+import { CHANGE_NAME, ADD_COMPANY, Company } from "./redux/reducer";
+import { AppState } from "./redux/reducer";
+import { createDispatch, createSelector } from "./redux/store";
 
 const App = () => {
     const changeName = createDispatch(CHANGE_NAME);
+    const addCompany = createDispatch(ADD_COMPANY);
     const [name, setName] = useState<string>("");
-    const filteredState = createSelector(({ name, ...rest }: AppState) => {
-        return { name };
-    });
+    const selectedName = createSelector(({ name }: AppState) => name);
+    const companies: Company[] = createSelector(({ companies }: AppState) => companies);
     return (
         <div>
-            <h1 className="wow">Jake's Redux</h1>
-            <Test />
-            {JSON.stringify(filteredState)}
+            <h1>{selectedName}'s Redux</h1>
             <input value={name} onChange={(e) => setName(e.currentTarget.value)}></input>
             <button onClick={() => changeName({ payload: name })}>dispatch action!</button>
+            <DispatchButton dispatch={addCompany} payload={{ name: "Levanta", salary: 6000 }}>
+                add levanta
+            </DispatchButton>
+            {companies.map(({ name }: Company) => (
+                <li key={name}>{name}</li>
+            ))}
         </div>
     );
 };
