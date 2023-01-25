@@ -1,31 +1,31 @@
-import { useState } from "react";
+import { useState, useSyncExternalStore } from "react";
 import { Action, OptionalActionArgs} from "./types";
 import connect from "../lib/connect";
 
 const createStore = <S>(reducer: (state: S | undefined, action: Action) => S) => {
-    const listeners: Function[] = [];
+    let listeners: Function[] = [];
     const initial = reducer(undefined, {type: "^^initialize^^"});
-    let store: S = initial;// use functional init for lazy init (one call)
+    let store: S = initial;
     const dispatch = (action: Action) => {
         store = reducer(store, action);
         listeners.forEach((listener: Function) => listener());
     };
     // Initialize with unknown action type to start with the user-defined initial state
     dispatch({ type: "^^initialize^^" });
-    const subscribe = (listener: Function): Function => {
+    const subscribe = (listener: () => void): (() => void) => {
         listeners.push(listener);
         return () => {
             // Function for unsubscribing listener
-            const listenerIdx = listeners.indexOf(listener);
-            listeners.splice(listenerIdx, 1);
+            listeners = listeners.filter(l => l !== listener);
         };
     };
     const getState = () => store;
 
-    const createSelector = (selector: Function) => {
-        const [selectedValue, setSelectedValue] = useState(() => getState());
-        subscribe(() => setSelectedValue(getState()));
-        return selector(selectedValue);
+    const useSelector = (selector: Function) => {
+        // Sync to 'external' data source such that we don't have to use useState to have selectorStore
+        // reflect the current state of data
+        const selectorStore = useSyncExternalStore(subscribe, getState);
+        return selector(selectorStore); // filter the data with the passed selector
     };
 
     const createDispatch = (actionType: string) => {
@@ -37,7 +37,7 @@ const createStore = <S>(reducer: (state: S | undefined, action: Action) => S) =>
     return {
         dispatch,
         getState,
-        createSelector,
+        useSelector,
         createDispatch,
         connect,
         subscribe,

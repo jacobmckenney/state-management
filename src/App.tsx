@@ -1,15 +1,16 @@
 import React, { useState } from "react";
 import DispatchButton from "./DispatchButton";
-import { CHANGE_NAME, ADD_COMPANY, Company } from "./redux/reducer";
+import { Company } from "./redux/reducer";
 import { AppState } from "./redux/reducer";
-import { createDispatch, createSelector } from "./redux/store";
+import { useSelector } from "./redux/store";
+import * as dispatchers from "./redux/dispatchers";
+
+const { addCompany, changeName } = dispatchers;
 
 const App = () => {
-    const changeName = createDispatch(CHANGE_NAME);
-    const addCompany = createDispatch(ADD_COMPANY);
     const [name, setName] = useState<string>("");
-    const selectedName = createSelector(({ name }: AppState) => name);
-    const companies: Company[] = createSelector(({ companies }: AppState) => companies);
+    const companies: Company[] = useSelector(({ companies }: AppState) => companies);
+    const selectedName = useSelector(({ name }: AppState) => name);
     return (
         <div>
             <h1>{selectedName}'s Redux</h1>
