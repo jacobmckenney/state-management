@@ -16,6 +16,7 @@ const initialState = {
     }],
 };
 
+type S = typeof initialState;
 
 export const CHANGE_NAME = "change_name";
 export const ADD_COMPANY = "add_company"
@@ -39,11 +40,10 @@ const HANDLERS: ActionHandlers = {
 
 
 const reducer = (state: State = initialState, action: Action) => {
-    console.log(state);
     if(HANDLERS[action.type]) {
         return HANDLERS[action.type](state, action);
     }
     return state;
 }
 
-export { reducer };
+export { reducer, S };
