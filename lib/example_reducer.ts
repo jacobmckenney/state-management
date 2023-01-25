@@ -1,4 +1,4 @@
-import type { State, Action, ActionHandlers} from "./types"
+import type { Action, ActionHandlers} from "./types"
 
 const initialState = {
     name: "Jacob",
@@ -16,20 +16,19 @@ const initialState = {
     }],
 };
 
-type S = typeof initialState;
-;
+type AppState = typeof initialState;
 
 export const CHANGE_NAME = "change_name";
 export const ADD_COMPANY = "add_company"
 
-const HANDLERS: ActionHandlers = {
-   [CHANGE_NAME]: (state: State, action: Action) => {
+const HANDLERS: ActionHandlers<AppState> = {
+   [CHANGE_NAME]: (state: AppState, action: Action) => {
         return {
             ...state,
             name: action.payload
         }
    },
-   [ADD_COMPANY]: (state: State, action: Action) => {
+   [ADD_COMPANY]: (state: AppState, action: Action) => {
         const newCompany = action.payload;
         const currentCompanies = state?.companies;
         return currentCompanies.includes(newCompany) ? state : {
@@ -39,20 +38,11 @@ const HANDLERS: ActionHandlers = {
    }
 }
 
-type ActionHandler = (state: S, action: Action) => S;
-
-interface HandlerTypes {
-    [CHANGE_NAME]: ActionHandler,
-    [ADD_COMPANY]: ActionHandler,
-}
-
-type PossibleHandlers = {[key in keyof HandlerTypes]}
-
-const reducer = (state: S = initialState, action: Action) => {
+const reducer = (state: AppState = initialState, action: Action) => {
     if(HANDLERS[action.type]) {
         return HANDLERS[action.type](state, action);
     }
     return state;
 }
 
-export { reducer, S };
+export { reducer, AppState };

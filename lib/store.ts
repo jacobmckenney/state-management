@@ -1,11 +1,11 @@
 import { useState } from "react";
-import { Action, OptionalActionArgs, State} from "./types";
+import { Action, OptionalActionArgs} from "./types";
 import connect from "../lib/connect";
 
-const createStore = <State>(reducer: (state: State | undefined, action: Action) => State) => {
+const createStore = <S>(reducer: (state: S | undefined, action: Action) => S) => {
     const listeners: Function[] = [];
     const initial = reducer(undefined, {type: "^^initialize^^"});
-    let store: State = initial as State; // use functional init for lazy init (one call)
+    let store: S = initial;// use functional init for lazy init (one call)
     const dispatch = (action: Action) => {
         store = reducer(store, action);
         listeners.forEach((listener: Function) => listener());

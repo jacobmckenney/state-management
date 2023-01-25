@@ -1,4 +1,3 @@
-type State = Record<string, any> | undefined;
 type Action = RequiredActionArgs & OptionalActionArgs;
 type RequiredActionArgs = {
     type: string;
@@ -9,13 +8,13 @@ type OptionalActionArgs = {
     error?: boolean
 }
 type Dispatch = (action: Action) => void;
-type ActionHandlers = Record<string, (state: State, action: Action) => State>;
-interface ConnectArgs {
-    mapStateToProps: {[prop: string]: State},
+type ActionHandlers<S> = Record<string, (state: S, action: Action) => S>;
+interface ConnectArgs<S> {
+    mapStateToProps: {[prop: string]: S},
     mapDispatchToProps: {[prop: string]: (restOfAction: OptionalActionArgs) => void},
 };
-type Selector<T> = (state: State) => T;
+type Selector<S, T> = (state: S) => T;
 
 export {
-   Selector, ConnectArgs, State, Action, ActionHandlers, OptionalActionArgs
+   Selector, ConnectArgs, Action, ActionHandlers, OptionalActionArgs
 };
