@@ -1,12 +1,11 @@
-import { Component, FC, ReactElement, useState } from "react";
-import React from "react";
-import { Action, OptionalActionArgs, State, ConnectArgs } from "./types";
+import { useState } from "react";
+import { Action, OptionalActionArgs, State} from "./types";
+import connect from "../lib/connect";
 
-type Selector = (state: State) => State;
-
-const createStore = (reducer: (state: State, action: Action) => State) => {
+const createStore = <State>(reducer: (state: State | undefined, action: Action) => State) => {
     const listeners: Function[] = [];
-    let store: State = undefined; // use functional init for lazy init (one call)
+    const initial = reducer(undefined, {type: "^^initialize^^"});
+    let store: State = initial as State; // use functional init for lazy init (one call)
     const dispatch = (action: Action) => {
         store = reducer(store, action);
         listeners.forEach((listener: Function) => listener());
@@ -33,14 +32,6 @@ const createStore = (reducer: (state: State, action: Action) => State) => {
         return (restOfAction: OptionalActionArgs) => {
             dispatch({ type: actionType, ...restOfAction });
         };
-    };
-
-    const connect = ({ mapDispatchToProps, mapStateToProps }: ConnectArgs): ((component: FC) => FC) => {
-        const mappedProps = { ...mapDispatchToProps, ...mapStateToProps };
-        const wrapped = (Comp: FC) => {
-            return () => <Comp {...mappedProps} />;
-        };
-        return wrapped;
     };
 
     return {

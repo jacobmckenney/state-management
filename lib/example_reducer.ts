@@ -17,6 +17,7 @@ const initialState = {
 };
 
 type S = typeof initialState;
+;
 
 export const CHANGE_NAME = "change_name";
 export const ADD_COMPANY = "add_company"
@@ -38,8 +39,16 @@ const HANDLERS: ActionHandlers = {
    }
 }
 
+type ActionHandler = (state: S, action: Action) => S;
 
-const reducer = (state: State = initialState, action: Action) => {
+interface HandlerTypes {
+    [CHANGE_NAME]: ActionHandler,
+    [ADD_COMPANY]: ActionHandler,
+}
+
+type PossibleHandlers = {[key in keyof HandlerTypes]}
+
+const reducer = (state: S = initialState, action: Action) => {
     if(HANDLERS[action.type]) {
         return HANDLERS[action.type](state, action);
     }
