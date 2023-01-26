@@ -11,8 +11,9 @@ type OptionalActionArgs = {
 type Dispatch = (action: Action) => void;
 type CreatedDispatch = (opArgs: OptionalActionArgs) => void;
 type ActionHandlers<S> = Record<string, (state: S, action: Action) => S>;
+type StateToProps<S> = {[prop: string]: Selector<S>};
 type ConnectArgs<S> = {
-    mapStateToProps: {[prop: string]: Selector<S>},
+    mapStateToProps: StateToProps<S>,
     mapDispatchToProps: ActionCreators,
     store: Store<S>;
 };
@@ -34,5 +35,5 @@ type ActionCreators = {
 }
 
 export {
-    ActionCreator, ActionCreators, SubscribeFn, Snapshot, SelectorFactory, DispatchFactory, Dispatch, CreatedDispatch, Store, Selector, ConnectArgs, Action, ActionHandlers, OptionalActionArgs
+    StateToProps, ActionCreator, ActionCreators, SubscribeFn, Snapshot, SelectorFactory, DispatchFactory, Dispatch, CreatedDispatch, Store, Selector, ConnectArgs, Action, ActionHandlers, OptionalActionArgs
 };

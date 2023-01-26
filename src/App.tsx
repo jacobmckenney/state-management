@@ -31,9 +31,6 @@ const App: React.FC = () => {
                     dispatch action!
                 </button>
                 <DispatchButton />
-                {companies.map(({ name }: Company) => (
-                    <li key={name}>{name}</li>
-                ))}
             </div>
         </StoreProvider>
     );
