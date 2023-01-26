@@ -1,6 +1,6 @@
 import React, { PropsWithChildren, FC } from "react";
 import { CreatedDispatch } from "../lib/types";
-import { Company } from "./redux/reducer";
+import { Company } from "./redux/types";
 
 interface Props extends PropsWithChildren {
     addCompany: (company: Company) => void;

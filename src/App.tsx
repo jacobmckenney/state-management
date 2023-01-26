@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { StoreProvider } from "../lib/provider";
 import DispatchButton from "./DispatchButton.connect";
-import { type Company, type AppState } from "./redux/reducer";
+import type { AppState } from "./redux/types";
 import store from "./redux/store";
 import * as actionCreators from "./redux/actionCreators";
 import bindActionCreators from "../lib/bindActionCreators";
@@ -11,7 +11,6 @@ const { changeName, addCompany } = bindActionCreators(actionCreators, dispatch);
 
 const App: React.FC = () => {
     const [name, setName] = useState<string>("");
-    const companies: Company[] = useSelector(({ companies }: AppState) => companies);
     const selectedName = useSelector(({ name }: AppState) => name);
     return (
         <StoreProvider store={store}>

@@ -1,3 +1,4 @@
+import { AppState } from "./types";
 import type { Action, ActionHandlers} from "../../lib/types";
 import isEqual from "lodash/isEqual";
 // initial state
@@ -16,15 +17,6 @@ const initialState = {
         salary: 8000,
     }],
 };
-export type Company = {
-    name: string,
-    salary: number,
-}
-type AppState = {
-    name: string,
-    title: string,
-    companies: Company[],
-}
 
 // Action Keys
 export const CHANGE_NAME = "change_name";
