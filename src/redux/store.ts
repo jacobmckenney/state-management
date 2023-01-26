@@ -1,3 +1,4 @@
 import { createStore } from "../../lib/store";
-import { reducer } from "./reducer";
-export const { createDispatch, useSelector } = createStore(reducer);
+import { AppState, reducer } from "./reducer";
+const store = createStore<AppState>(reducer);
+export default store;
