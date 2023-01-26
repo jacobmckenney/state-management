@@ -13,7 +13,7 @@ const createStore = <S>(reducer: (state: S | undefined, action: Action) => S): S
     // Initialize with unknown action type to start with the user-defined initial state
     dispatch({ type: "^^initialize^^" });
 
-    const subscribe: SubscribeFn<S> = (listener: () => void): (() => void) => {
+    const subscribe: SubscribeFn = (listener: () => void): (() => void) => {
         listeners.push(listener);
         return () => {
             // Function for unsubscribing listener

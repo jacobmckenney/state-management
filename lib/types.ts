@@ -12,22 +12,27 @@ type Dispatch = (action: Action) => void;
 type CreatedDispatch = (opArgs: OptionalActionArgs) => void;
 type ActionHandlers<S> = Record<string, (state: S, action: Action) => S>;
 type ConnectArgs<S> = {
-    mapStateToProps: {[prop: string]: S},
-    mapDispatchToProps: {[prop: string]: (restOfAction: OptionalActionArgs) => void},
+    mapStateToProps: {[prop: string]: Selector<S>},
+    mapDispatchToProps: ActionCreators,
+    store: Store<S>;
 };
 type Selector<S> = (state: S) => any;
 type Snapshot<S> = () => S;
 type SelectorFactory<S> = (selector: Selector<S>) => any;
 type DispatchFactory<S> = (actionType: string) => CreatedDispatch;
-type SubscribeFn<S> = (listener: () => void) => (() => void);
+type SubscribeFn = (listener: () => void) => (() => void);
 type Store<S> = {
     dispatch: Dispatch,
     getState: Snapshot<S>,
     useSelector: SelectorFactory<S>,
     createDispatch: DispatchFactory<S>,
-    subscribe: SubscribeFn<S>,
+    subscribe: SubscribeFn,
+}
+type ActionCreator = (...args: any) => Action;
+type ActionCreators = {
+    [name: string]: ActionCreator
 }
 
 export {
-    SubscribeFn, Snapshot, SelectorFactory, DispatchFactory, Dispatch, CreatedDispatch, Store, Selector, ConnectArgs, Action, ActionHandlers, OptionalActionArgs
+    ActionCreator, ActionCreators, SubscribeFn, Snapshot, SelectorFactory, DispatchFactory, Dispatch, CreatedDispatch, Store, Selector, ConnectArgs, Action, ActionHandlers, OptionalActionArgs
 };

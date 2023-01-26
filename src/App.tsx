@@ -1,13 +1,13 @@
 import React, { useState } from "react";
 import { StoreProvider } from "../lib/provider";
-import DispatchButton from "./DispatchButton";
+import DispatchButton from "./DispatchButton.connect";
 import { type Company, type AppState } from "./redux/reducer";
 import store from "./redux/store";
-import * as dispatchers from "./redux/dispatchers";
+import * as actionCreators from "./redux/actionCreators";
+import bindActionCreators from "../lib/bindActionCreators";
 
-const { useSelector } = store;
-
-const { addCompany, changeName } = dispatchers;
+const { useSelector, dispatch } = store;
+const { changeName, addCompany } = bindActionCreators(actionCreators, dispatch);
 
 const App: React.FC = () => {
     const [name, setName] = useState<string>("");
@@ -25,14 +25,12 @@ const App: React.FC = () => {
                 ></input>
                 <button
                     onClick={() => {
-                        changeName({ payload: name });
+                        changeName(name);
                     }}
                 >
                     dispatch action!
                 </button>
-                <DispatchButton dispatch={addCompany} payload={{ name: "Levanta", salary: 6000 }}>
-                    add levanta
-                </DispatchButton>
+                <DispatchButton />
                 {companies.map(({ name }: Company) => (
                     <li key={name}>{name}</li>
                 ))}

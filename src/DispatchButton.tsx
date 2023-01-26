@@ -1,13 +1,20 @@
 import React, { PropsWithChildren, FC } from "react";
 import { CreatedDispatch } from "../lib/types";
+import { Company } from "./redux/reducer";
 
 interface Props extends PropsWithChildren {
-    dispatch: CreatedDispatch;
-    payload: any;
+    addCompany: (company: Company) => void;
 }
 
-const DispatchButton: FC<Props> = ({ dispatch, payload, children }) => {
-    return <button onClick={() => dispatch({ payload })}>{children}</button>;
+const DispatchButton: FC<Props> = ({ addCompany }) => {
+    return (
+        <div>
+            <button onClick={() => addCompany({ name: "Levanta", salary: 6000 })}>add Levanta</button>
+            {/* {companies.map(({ name }: Company) => (
+                <li key={name}>{name}</li>
+            ))} */}
+        </div>
+    );
 };
 
 export default DispatchButton;
